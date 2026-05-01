@@ -99,7 +99,18 @@ public class MainTeleOpMode extends LinearOpMode {
                             intake.outtake();
                         }*/
                 } else if (gamepad1.left_bumper) {
-                    //outtake.short_outtake();
+
+                    bottomDisPow = robot.longBottomRPM;
+                    topDisPow = robot.longTopRPM;
+
+                    robot.outtake.runTopMotor(
+                            robot.OuttakePID.calculate(robot.outtake.getTopRPM(), topDisPow)
+                    );
+
+                    robot.outtake.runBottomMotor(
+                            robot.OuttakePID.calculate(robot.outtake.getBottomRPM(), bottomDisPow)
+                    );
+
                 } else if (gamepad1.y){
                     robot.outtake.intake();
                 }
@@ -153,6 +164,7 @@ public class MainTeleOpMode extends LinearOpMode {
             telemetry.addData("Target Area", robot.vision.getLatestTa());
             telemetry.addData("Target Id", robot.vision.getLatestId());
             //telemetry.addData("Target Team", vision.getLatestTeam().getFiducialId());
+            telemetry.addLine("Manual shooter branch is running");
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             //telemetry.addData("Outtake Power 0.0-1.0: ", outtake_pow);
             //telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
